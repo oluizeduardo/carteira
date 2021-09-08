@@ -4,6 +4,7 @@ package servlet;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,22 +20,34 @@ import modelo.TipoTransacao;
 @WebServlet("/transacoes")
 public class TrasacoesServlet extends HttpServlet {
 
+
+	private static final long serialVersionUID = 1L;
+	
 	private List<Transacao> transacoes = new ArrayList<>();
 	
+	
 	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		Transacao t1 = new Transacao("XPTO1", new BigDecimal("152.60"), 10,LocalDate.now(), TipoTransacao.COMPRA);
-		Transacao t2 = new Transacao("XPTO2", new BigDecimal("2.60"), 50,LocalDate.now(), TipoTransacao.VENDA);
-		Transacao t3 = new Transacao("XPTO3", new BigDecimal("18.00"), 6,LocalDate.now(), TipoTransacao.COMPRA);
-		
-		transacoes.add(t1);
-		transacoes.add(t2);
-		transacoes.add(t3);
-		
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setAttribute("transacoes", transacoes);
 		
-		req.getRequestDispatcher("Transacoes.jsp").forward(req, resp);
+		req.getRequestDispatcher("WEB-INF/jsp/Transacoes.jsp").forward(req, resp);
+	}
+	
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		String ticker = req.getParameter("ticker");
+		LocalDate data = LocalDate.parse(req.getParameter("data"));
+		BigDecimal preco = new BigDecimal(req.getParameter("preco").replace(",", "."));
+		int quantidade = Integer.parseInt(req.getParameter("quantidade"));
+		TipoTransacao tipo = TipoTransacao.valueOf(req.getParameter("tipo"));
+
+		Transacao transacao = new Transacao(ticker, preco, quantidade, data, tipo);
+		
+		transacoes.add(transacao);
+		
+		resp.sendRedirect("transacoes");
 	}
 	
 	
