@@ -11,6 +11,9 @@
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 	</head>
 <body class="container">
+	
+	<h1 class="text-center">Cadastro de Transações</h1>
+
 	<form action="<c:url value="/transacoes"/>" method="POST" class="g3">
 		
 		<div class="form-group">
@@ -46,11 +49,13 @@
 			<button class="btn btn-primary" type="submit">Gravar</button>
 		</div>
 	</form>
-	<p>
+
+	<hr style="margin: 40px"/>
+
 	<h1 class="text-center">Lista de Transações</h1>
 	<p>
-	<table class="table table-dark table-hover">
-		<thead>
+	<table class="table table-hover table-striped">
+		<thead class="table-dark">
 			<tr>
 				<th scope="col" class="text-center">TICKER</th>
 				<th scope="col" class="text-center">DATA</th>

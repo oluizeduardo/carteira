@@ -3,10 +3,10 @@ package servlet;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import carteira.Transacao;
+import dao.TransacaoDAO;
+import factory.ConnectionFactory;
 import modelo.TipoTransacao;
 
 @WebServlet("/transacoes")
@@ -23,12 +25,21 @@ public class TrasacoesServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	
-	private List<Transacao> transacoes = new ArrayList<>();
+	private TransacaoDAO dao = null;
+	
+	
+	
+	public TrasacoesServlet() {
+		this.dao = new TransacaoDAO(new ConnectionFactory().getConnection());
+	}
+	
+	
+	
 	
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setAttribute("transacoes", transacoes);
+		req.setAttribute("transacoes", dao.listar());
 		
 		req.getRequestDispatcher("WEB-INF/jsp/Transacoes.jsp").forward(req, resp);
 	}
@@ -45,7 +56,7 @@ public class TrasacoesServlet extends HttpServlet {
 
 		Transacao transacao = new Transacao(ticker, preco, quantidade, data, tipo);
 		
-		transacoes.add(transacao);
+		this.dao.cadastrar(transacao);
 		
 		resp.sendRedirect("transacoes");
 	}

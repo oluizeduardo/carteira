@@ -21,13 +21,6 @@ public class TransacaoDAO {
 	}
 	
 	public void cadastrar(Transacao novaTransacao) {
-		
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-		} catch (ClassNotFoundException e) { 
-			System.err.println("Erro ao carregar o driver do banco de dados.");
-		}
-		
 		try {
 			
 			String sql = "INSERT INTO transacoes (ticker, preco, quantidade, data, tipo) VALUES (?, ?, ?, ?, ?)";
@@ -50,23 +43,13 @@ public class TransacaoDAO {
 	
 	
 	public List<Transacao> listar(){
-		String url = "jdbc:mysql://localhost:3306/carteira?useTimezone=true&serverTimezone=UTC";
-		String usuario = "root";
-		String senha = "root";
 		
 		List<Transacao> transacoes = new ArrayList<Transacao>();
-		
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-		} catch (ClassNotFoundException e) { 
-			System.err.println("Erro ao carregar o driver do banco de dados.");
-		}
-		
+
 		try {
 			
 			String sql = "SELECT * FROM transacoes";
 			
-			Connection conexao = DriverManager.getConnection(url, usuario, senha);
 			PreparedStatement ps = conexao.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			
